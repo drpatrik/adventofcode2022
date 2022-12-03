@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <map>
+#include <numeric>
 
 const std::map<std::string, int> kOutcomes = {
   { "RR", 4 }, // Draw 3 + 1
@@ -74,9 +75,7 @@ auto read_strategy_file_part2(const std::string& name) {
 int calculate_total_score(const std::vector<std::string>& strategies) {
   int sum = 0;
 
-  for (const auto& strategy : strategies) {
-    sum +=  kOutcomes.at(strategy);
-  }
+  std::for_each(strategies.begin(), strategies.end(), [&sum](const auto& strategy) { sum += kOutcomes.at(strategy); });
 
   return sum;
 }
