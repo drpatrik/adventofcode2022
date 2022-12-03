@@ -82,9 +82,9 @@ int calculate_total_score(const std::vector<std::string>& strategies) {
 }
 
 void day_two() {
-  auto strategies = read_strategy_file_part1("input_day2.txt");
-  std::cout << "Day1 - Part 1: " << calculate_total_score(strategies) << std::endl;
+  auto strategies = read_strategy_file_part1("input_files/input_day2.txt");
+  std::cout << "Day2 - Part 1: " << calculate_total_score(strategies) << std::endl;
 
-  strategies = read_strategy_file_part2("input_day2.txt");
+  strategies = read_strategy_file_part2("input_files/input_day2.txt");
   std::cout << "Day2 - Part 2: " << calculate_total_score(strategies) << std::endl;
 }

@@ -34,16 +34,14 @@ int return_most_calories(const  std::vector<std::vector<int>>& elfs) {
 auto return_top_three(const  std::vector<std::vector<int>>& elfs) {
   std::vector<int> sums;
 
-  for (const auto& elf : elfs) {
-    sums.push_back(std::accumulate(elf.begin(), elf.end(), 0));
-  }
+  std::transform(elfs.begin(), elfs.end(), std::back_inserter(sums), [](const auto& elf) { return std::accumulate(elf.begin(), elf.end(), 0); });
   std::sort(sums.begin(), sums.end(), std::greater<int>());
 
   return std::vector<int>(sums.begin(), sums.begin() + std::min<int>(3, sums.size()));
 }
 
 void day_one() {
-  auto elfs = read_calories_file("input_day1.txt");
+  auto elfs = read_calories_file("input_files/input_day1.txt");
   std::cout << "Day 1 - Part 1: " << return_most_calories(elfs) << std::endl;
   auto sums = return_top_three(elfs);
   std::cout << "Day 1 - Part 2: " << std::accumulate(sums.begin(), sums.end(), 0) << std::endl;

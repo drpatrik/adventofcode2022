@@ -4,5 +4,7 @@ extern void day_three();
 extern void day_four();
 
 int main(int, char*[]) {
-  day_four();
+  day_one();
+  day_two();
+  day_three();
 }
