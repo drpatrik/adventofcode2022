@@ -3,7 +3,9 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <numeric>
 #include <algorithm>
+
 
 typedef std::tuple<int, int, int, int> Section;
 
@@ -43,13 +45,7 @@ int fully_contains(const Section& section) {
 }
 
 int total_contained_assigmeents(const std::vector<Section>& sections) {
-  int sum = 0;
-
-  for (const auto& s : sections) {
-    sum += fully_contains(s);
-  }
-
-  return sum;
+  return std::accumulate(sections.begin(), sections.end(), 0, [](const auto& a, auto b) { return a + fully_contains(b); });
 }
 
 std::vector<int> expand_range(int l, int u) {
@@ -74,13 +70,7 @@ int overlapping_assignments(const Section& section) {
 }
 
 int total_overlapping_assignments(const std::vector<Section>& sections) {
-  int sum = 0;
-
-  for (const auto& s : sections) {
-    sum += overlapping_assignments(s);
-  }
-
-  return sum;
+  return std::accumulate(sections.begin(), sections.end(), 0, [](const auto& a, auto b) { return a + overlapping_assignments(b); });
 }
 
 void day_four() {
