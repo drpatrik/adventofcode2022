@@ -7,4 +7,5 @@ int main(int, char*[]) {
   day_one();
   day_two();
   day_three();
+  day_four();
 }

@@ -99,9 +99,10 @@ int calculate_badge_score(const std::vector<std::vector<std::string>>& group_bac
 void day_three() {
   const auto backpacks_p1 = read_backpacks_part1("input_files/input_day3.txt");
 
-  std::cout << "Day3 - Part 1: " << calculate_total_priority(backpacks_p1) << std::endl;
+  std::cout << "Day 3 - Part 1: " << calculate_total_priority(backpacks_p1) << std::endl;
 
   const auto backpacks_p2 = read_backpacks_part2("input_files/input_day3.txt");
   const auto grouped_backpacks = group_backpacks(backpacks_p2);
-  std::cout << "Day3 - Part 2: " << calculate_badge_score(grouped_backpacks) << std::endl;
+
+  std::cout << "Day 3 - Part 2: " << calculate_badge_score(grouped_backpacks) << std::endl;
 }
