@@ -3,8 +3,6 @@
 #include <string>
 #include <tuple>
 #include <vector>
-#include <numeric>
-#include <algorithm>
 
 typedef std::tuple<int, int, int, int> Section;
 
@@ -37,24 +35,10 @@ auto read_sections(const std::string& name) {
   return sections;
 }
 
-std::vector<int> expand_range(int l, int u) {
-  std::vector<int> range;
-
-  for (int i = l; i <= u;i++) {
-    range.push_back(i);
-  }
-
-  return range;
-}
-
 std::pair<int, int> overlapping_assignments(const Section& section) {
-  auto r1 = expand_range(std::get<0>(section), std::get<1>(section));
-  auto r2 = expand_range(std::get<2>(section), std::get<3>(section));
+  auto [l1,u1, l2, u2] = section;
 
-  std::vector<int> i_section;
-  std::set_intersection(r1.begin(), r1.end(), r2.begin(), r2.end(), std::back_inserter(i_section));
-
-  return std::make_pair(i_section.size() == r1.size() || i_section.size() == r2.size(), i_section.size() > 0);
+  return std::make_pair(((l1 >= l2 && u1 <= u2) || (l2 >= l1 && u2 <= u1)), !(u1 < l2 || u2 < l1));
 }
 
 std::pair<int, int>  total_overlapping_assignments(const std::vector<Section>& sections) {
