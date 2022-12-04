@@ -37,16 +37,6 @@ auto read_sections(const std::string& name) {
   return sections;
 }
 
-int fully_contains(const Section& section) {
-  auto [l1,u1, l2, u2] = section;
-
-  return  ((l1 >= l2 && u1 <= u2) || (l2 >= l1 && u2 <= u1));
-}
-
-int total_contained_assigmeents(const std::vector<Section>& sections) {
-  return std::accumulate(sections.begin(), sections.end(), 0, [](const auto& a, auto b) { return a + fully_contains(b); });
-}
-
 std::vector<int> expand_range(int l, int u) {
   std::vector<int> range;
 
@@ -57,24 +47,35 @@ std::vector<int> expand_range(int l, int u) {
   return range;
 }
 
-int overlapping_assignments(const Section& section) {
-  auto [l1,u1, l2, u2] = section;
-  auto r1 = expand_range(l1, u1);
-  auto r2 = expand_range(l2, u2);
+std::pair<int, int> overlapping_assignments(const Section& section) {
+  auto r1 = expand_range(std::get<0>(section), std::get<1>(section));
+  auto r2 = expand_range(std::get<2>(section), std::get<3>(section));
 
-  std::vector<int> intersection;
-  std::set_intersection(r1.begin(), r1.end(), r2.begin(), r2.end(), std::back_inserter(intersection));
+  std::vector<int> i_section;
+  std::set_intersection(r1.begin(), r1.end(), r2.begin(), r2.end(), std::back_inserter(i_section));
 
-  return (intersection.size() > 0);
+  return std::make_pair(i_section.size() == r1.size() || i_section.size() == r2.size(), i_section.size() > 0);
 }
 
-int total_overlapping_assignments(const std::vector<Section>& sections) {
-  return std::accumulate(sections.begin(), sections.end(), 0, [](const auto& a, auto b) { return a + overlapping_assignments(b); });
+std::pair<int, int>  total_overlapping_assignments(const std::vector<Section>& sections) {
+  int total_contained = 0;
+  int total_overlapping = 0;
+
+  for (const auto& section : sections) {
+    auto [c, o] = overlapping_assignments(section);
+
+    total_contained += c;
+    total_overlapping += o;
+  }
+
+  return std::make_pair(total_contained, total_overlapping);
 }
 
 void day_four() {
   auto sections = read_sections("input_files/input_day4.txt");
 
-  std::cout << "Day 4 - Part 1: " << total_contained_assigmeents(sections) << std::endl;
-  std::cout << "Day 4 - Part 2: " << total_overlapping_assignments(sections) << std::endl;
+  auto [total_contained, total_overlapping] = total_overlapping_assignments(sections);
+
+  std::cout << "Day 4 - Part 1: " << total_contained << std::endl;
+  std::cout << "Day 4 - Part 2: " << total_overlapping << std::endl;
 }
