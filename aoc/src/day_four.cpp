@@ -6,7 +6,6 @@
 #include <numeric>
 #include <algorithm>
 
-
 typedef std::tuple<int, int, int, int> Section;
 
 inline Section get_section(const std::string& str) {
@@ -27,9 +26,9 @@ inline Section get_section(const std::string& str) {
 }
 
 auto read_sections(const std::string& name) {
-  std::string str;
   std::ifstream f(name);
   std::vector<Section> sections;
+  std::string str;
 
   while (std::getline(f, str)) {
     sections.emplace_back(get_section(str));
