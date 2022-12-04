@@ -4,9 +4,9 @@
 #include <tuple>
 #include <vector>
 
-typedef std::tuple<int, int, int, int> Section;
+using Section = std::tuple<int, int, int, int>;
 
-inline Section get_section(const std::string& str) {
+Section get_section(const std::string& str) {
   std::string token;
   std::vector<int> range;
 
