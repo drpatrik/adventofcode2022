@@ -3,13 +3,16 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <type_traits>
+
+enum class CrateMoverType { CM9000, CM9001 };
 
 using Stack = std::vector<char>;
 using CargoHold = std::vector<Stack>;
 using Moves = std::tuple<int, int, int>;
 using Rearrangement = std::vector<Moves>;
 
-const CargoHold cargo_hold_template = {
+const CargoHold kCargoHoldTemplate = {
   { 'L','C', 'G', 'M', 'Q' },
   { 'G','H','F','T','C','L','D','R'},
   { 'R','W','T','M','N','F','J','V'},
@@ -21,7 +24,7 @@ const CargoHold cargo_hold_template = {
   { 'G','H','F','Z'}
 };
 
-const CargoHold cargo_hold_test_template = {
+const CargoHold kCargoHoldTestTemplate = {
   { 'N', 'Z' },
   { 'D', 'C', 'M'},
   { 'P' }
@@ -94,7 +97,8 @@ auto CrateMover9000(const CargoHold& cargo_hold_template, const Rearrangement& r
   return top_crates;
 }
 
-auto CrateMover9001(const CargoHold& cargo_hold_template, const Rearrangement& rearrangements) {
+template <CrateMoverType cm_type>
+auto CrateMover(const CargoHold& cargo_hold_template, const Rearrangement& rearrangements) {
   std::string top_crates;
   CargoHold cargo_hold(cargo_hold_template);
 
@@ -107,7 +111,12 @@ auto CrateMover9001(const CargoHold& cargo_hold_template, const Rearrangement& r
 
     std::vector<char> slice(from.begin(), from.begin() + n);
     from.erase(from.begin(), from.begin() + n);
-    to.insert(to.begin(), slice.begin(), slice.end());
+
+    if constexpr(cm_type == CrateMoverType::CM9000) {
+      to.insert(to.begin(), slice.rbegin(), slice.rend());
+    } else {
+      to.insert(to.begin(), slice.begin(), slice.end());
+    }
   }
   for (const auto& stack : cargo_hold) {
     top_crates += stack.front();
@@ -138,6 +147,6 @@ auto read_file(const std::string& name) {
 void day_five() {
   auto strategies = read_file("input_files/input_day5.txt");
 
-  std::cout << "Day 5 - Part 1: " << CrateMover9000(cargo_hold_template, strategies) << std::endl;
-  std::cout << "Day 5 - Part 2: " << CrateMover9001(cargo_hold_template, strategies) << std::endl;
+  std::cout << "Day 5 - Part 1: " << CrateMover<CrateMoverType::CM9000>(kCargoHoldTemplate, strategies) << std::endl;
+  std::cout << "Day 5 - Part 2: " << CrateMover<CrateMoverType::CM9001>(kCargoHoldTemplate, strategies) << std::endl;
 }
