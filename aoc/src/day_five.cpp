@@ -3,6 +3,7 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <numeric>
 #include <type_traits>
 
 enum class CrateMoverType { CM9000, CM9001 };
@@ -29,22 +30,6 @@ const CargoHold kCargoHoldTestTemplate = {
   { 'D', 'C', 'M'},
   { 'P' }
 };
-
-void PrintMoves(const Moves moves) {
-  auto [n, s1, s2] = moves;
-
-  std::cout << "Move " << n << " from " << s1 << " to " << s2 << std::endl;
-}
-
-void PrintCargoHold(const CargoHold& cargo_hold) {
-  for (const auto& stack : cargo_hold) {
-    for (const auto crate : stack) {
-      std::cout << crate;
-    }
-    std::cout << std::endl;
-  }
-  std::cout << "----" << std::endl;
-}
 
 Moves GetMoves(const std::string& line) {
   std::string num;
@@ -76,30 +61,8 @@ Moves GetMoves(const std::string& line) {
   return { moves.at(0), moves.at(1), moves.at(2) };
 }
 
-auto CrateMover9000(const CargoHold& cargo_hold_template, const Rearrangement& rearrangements) {
-  std::string top_crates;
-  CargoHold cargo_hold(cargo_hold_template);
-
-  for (const auto& moves : rearrangements) {
-    auto [n, s1, s2] = moves;
-
-    Stack& from = cargo_hold.at(s1 - 1);
-    Stack& to = cargo_hold.at(s2 - 1);
-
-    std::vector<char> slice(from.begin(), from.begin() + n);
-    from.erase(from.begin(), from.begin() + n);
-    to.insert(to.begin(), slice.rbegin(), slice.rend());
-  }
-  for (const auto& stack : cargo_hold) {
-    top_crates += stack.front();
-  }
-
-  return top_crates;
-}
-
 template <CrateMoverType cm_type>
 auto CrateMover(const CargoHold& cargo_hold_template, const Rearrangement& rearrangements) {
-  std::string top_crates;
   CargoHold cargo_hold(cargo_hold_template);
 
   for (const auto& moves : rearrangements) {
@@ -118,11 +81,8 @@ auto CrateMover(const CargoHold& cargo_hold_template, const Rearrangement& rearr
       to.insert(to.begin(), slice.begin(), slice.end());
     }
   }
-  for (const auto& stack : cargo_hold) {
-    top_crates += stack.front();
-  }
 
-  return top_crates;
+  return std::accumulate(cargo_hold.begin(), cargo_hold.end(), std::string(""), [](const auto& a, const auto& b) { return a + b.front(); });
 }
 
 auto read_file(const std::string& name) {
