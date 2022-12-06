@@ -4,7 +4,10 @@
 #include <string>
 #include <type_traits>
 
-int FindStartOfPacket(std::istream& stream, size_t length) {
+const int kStartOfPacketMarkerLength = 4;
+const int kStartOfMessageMarkerLength = 14;
+
+int FindStartOf(std::istream& stream, size_t marker_length) {
   char ch;
   int pos = 0;
   std::string buffer;
@@ -15,7 +18,7 @@ int FindStartOfPacket(std::istream& stream, size_t length) {
       buffer.erase(buffer.begin(), buffer.begin() + buffer.find(ch) + 1);
     }
     buffer += ch;
-    if (buffer.size() == length) {
+    if (buffer.size() == marker_length) {
       return pos;
     }
   }
@@ -26,7 +29,7 @@ int FindStartOfPacket(std::istream& stream, size_t length) {
 void day_six() {
   std::ifstream f("input_files/input_day6.txt");
 
-  std::cout << "Day 6 - Part 1: " << FindStartOfPacket(f, 4) << std::endl;
+  std::cout << "Day 6 - Part 1: " << FindStartOf(f, kStartOfPacketMarkerLength) << std::endl;
   f.seekg (0, f.beg);
-  std::cout << "Day 6 - Part 2: " << FindStartOfPacket(f, 14) << std::endl;
+  std::cout << "Day 6 - Part 2: " << FindStartOf(f, kStartOfMessageMarkerLength) << std::endl;
 }
