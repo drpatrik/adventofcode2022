@@ -51,7 +51,7 @@ std::pair<int, std::string> ParseFileToken(const std::string& line) {
   return std::make_pair(std::stoi(line.substr(0, pos)), line.substr(pos + 1, line.size()));
 }
 
-std::pair<Token, std::string> ParseTerminalOutput(const std::string& line) {
+std::pair<Token, std::string> ParseLine(const std::string& line) {
     if (line[0] != '$') {
       if (line.find("dir") != std::string::npos) {
         return std::make_pair(Token::DIRECTORY, std::string(line.begin() + 4, line.end()));
@@ -83,7 +83,7 @@ void update_directory_sizes(FileNode* node) {
   }
 }
 
-FileNode* ParseFileSystem() {
+FileNode* ParseTerminalOutput() {
   std::ifstream f("input_files/input_day7.txt");
   std::string line;
 
@@ -91,7 +91,7 @@ FileNode* ParseFileSystem() {
   FileNode* current = nullptr;
 
   while (std::getline(f, line)) {
-    auto [token, param] = ParseTerminalOutput(line);
+    auto [token, param] = ParseLine(line);
 
     switch (token) {
       case Token::FILE: {
@@ -125,7 +125,9 @@ FileNode* ParseFileSystem() {
         exit(0);
     }
   }
-  update_directory_sizes(root);
+  if (root != nullptr) {
+    update_directory_sizes(root);
+  }
 
   return root;
 }
@@ -172,7 +174,7 @@ int Part2(const FileNode *root) {
 }
 
 void day_seven() {
-   auto root = ParseFileSystem();
+   auto root = ParseTerminalOutput();
    std::cout << "Day 7 - Part 1: " << Part1(root) << std::endl;
    std::cout << "Day 7 - Part 2: " << Part2(root) << std::endl;
 }
