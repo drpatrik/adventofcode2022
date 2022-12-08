@@ -173,6 +173,6 @@ int Part2(const FileNode *root) {
 
 void day_seven() {
    auto root = ParseFileSystem();
-   std::cout << "Day 6 - Part 1: " << Part1(root) << std::endl;
-   std::cout << "Day 6 - Part 2: " << Part2(root) << std::endl;
+   std::cout << "Day 7 - Part 1: " << Part1(root) << std::endl;
+   std::cout << "Day 7 - Part 2: " << Part2(root) << std::endl;
 }
