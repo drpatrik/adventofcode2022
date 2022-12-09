@@ -6,7 +6,8 @@ using Forest = std::vector<std::vector<int>>;
 
 inline int get_tree(int x, int y, const Forest& forest) { return forest.at(y).at(x); }
 
-int LookUp(int x_pos, int y_pos, const Forest& forest, bool calc_distance = false) {
+template<bool CalculateDistance = false>
+int LookUp(int x_pos, int y_pos, const Forest& forest) {
   int height = get_tree(x_pos, y_pos, forest);
   int distance = 0;
 
@@ -14,13 +15,14 @@ int LookUp(int x_pos, int y_pos, const Forest& forest, bool calc_distance = fals
     if (get_tree(x_pos, y, forest) >= height) {
       return distance + 1;;
     }
-    calc_distance && distance++;
+    CalculateDistance && distance++;
   }
 
   return distance;;
 }
 
-int LookDown(int x_pos, int y_pos, const Forest& forest, bool calc_distance = false) {
+template<bool CalculateDistance = false>
+int LookDown(int x_pos, int y_pos, const Forest& forest) {
   int height = get_tree(x_pos, y_pos, forest);
   int distance = 0;
 
@@ -28,13 +30,14 @@ int LookDown(int x_pos, int y_pos, const Forest& forest, bool calc_distance = fa
     if (get_tree(x_pos, y, forest) >= height) {
       return distance + 1;
     }
-    calc_distance && distance++;
+    CalculateDistance && distance++;
   }
 
   return distance;;
 }
 
-int LookLeft(int x_pos, int y_pos, const Forest& forest, bool calc_distance = false) {
+template<bool CalculateDistance = false>
+int LookLeft(int x_pos, int y_pos, const Forest& forest) {
   int height = get_tree(x_pos, y_pos, forest);
   int distance = 0;
 
@@ -42,13 +45,14 @@ int LookLeft(int x_pos, int y_pos, const Forest& forest, bool calc_distance = fa
     if (get_tree(x, y_pos, forest) >= height) {
       return distance + 1;
     }
-    calc_distance && distance++;
+     CalculateDistance && distance++;
   }
 
   return distance;;
 }
 
-int LookRight(int x_pos, int y_pos, const Forest& forest, bool calc_distance = false) {
+template<bool CalculateDistance = false>
+int LookRight(int x_pos, int y_pos, const Forest& forest) {
   int height = get_tree(x_pos, y_pos, forest);
   int distance = 0;
 
@@ -56,7 +60,7 @@ int LookRight(int x_pos, int y_pos, const Forest& forest, bool calc_distance = f
     if (get_tree(x, y_pos, forest) >= height) {
       return distance + 1;
     }
-    calc_distance && distance++;
+    CalculateDistance && distance++;
   }
 
   return distance;
@@ -86,10 +90,10 @@ int FindHighestScenicScore(const Forest& forest) {
 
   for (size_t y_pos = 1; y_pos <= forest.size() - 2; ++y_pos) {
     for (size_t x_pos = 1; x_pos <= forest.at(y_pos).size() - 2; ++x_pos) {
-      auto u = LookUp(x_pos, y_pos, forest, true);
-      auto d = LookDown(x_pos, y_pos, forest, true);
-      auto l = LookLeft(x_pos, y_pos, forest, true);
-      auto r = LookRight(x_pos, y_pos, forest, true);
+      auto u = LookUp<true>(x_pos, y_pos, forest);
+      auto d = LookDown<true>(x_pos, y_pos, forest);
+      auto l = LookLeft<true>(x_pos, y_pos, forest);
+      auto r = LookRight<true>(x_pos, y_pos, forest);
 
       max = std::max(max, u * d * l * r);
     }
