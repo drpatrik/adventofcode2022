@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
+
+#include "utility/split.h"
 
 const int kRows = 6;
 const int kCols = 40;
@@ -16,16 +17,14 @@ InstructionPipeline ReadInstructions(const std::string& name) {
   int cycle = 1;
 
   while (std::getline(f, line)) {
-    const int kParamStart = 5;
+    auto tokens = utility::split(line, " ");
 
-    auto it = line.find("addx ");
-
-    if (it != std::string::npos) {
+    if (tokens.at(0) == "addx") {
       pipeline.push_back(std::make_pair(cycle, 0));
       cycle++;
-      pipeline.push_back(std::make_pair(cycle, std::stoi(std::string(line.begin() + kParamStart, line.end()))));
+      pipeline.push_back(std::make_pair(cycle, std::stoi(tokens.at(1))));
     } else {
-      pipeline.push_back(std::make_pair(cycle,  0));
+      pipeline.push_back(std::make_pair(cycle, 0));
     }
     cycle++;
   }
