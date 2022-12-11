@@ -7,9 +7,10 @@ extern void day_six();
 extern void day_seven();
 extern void day_eight();
 extern void day_nine();
+extern void day_ten();
 
 int main(int, char*[]) {
-  day_one();
+  /*day_one();
   day_two();
   day_three();
   day_four();
@@ -17,5 +18,6 @@ int main(int, char*[]) {
   day_six();
   day_seven();
   day_eight();
-  day_nine();
+  day_nine();*/
+  day_ten();
 }

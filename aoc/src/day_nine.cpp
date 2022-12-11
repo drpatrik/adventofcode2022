@@ -24,20 +24,17 @@ struct Position {
 using VisitedPos = std::set<Position>;
 using Motions = std::vector<std::pair<char, int>>;
 
+template <typename T> int sgn(T val) { return (T(0) < val) - (val < T(0)); }
+
 Position UpdateTail(const Position& head, const Position& tail) {
   const int dx = head.x() - tail.x();
   const int dy = head.y() - tail.y();
 
   Position new_tail = tail;
 
-  if (std::abs(dx) <= 1 && std::abs(dy) <= 1) {
-    return new_tail;
-  } else if (std::abs(dx) >= 2 && std::abs(dy) >= 2) {
-    new_tail = Position(tail.x() < head.x() ? head.x() - 1 : head.x() + 1, tail.y() < head.y() ? head.y() - 1 : head.y() + 1);
-  }  else if  (std::abs(dx) >= 2) {
-    new_tail = Position(tail.x() < head.x() ? head.x() - 1 : head.x() + 1, head.y());
-  } else if  (std::abs(dy) >= 2) {
-    new_tail = Position(head.x(), tail.y() < head.y() ? head.y() - 1 : head.y() + 1);
+  if (abs(dx) > 1 || abs(dy) > 1) {
+    new_tail._x += sgn(dx);
+    new_tail._y += sgn(dy);
   }
 
   return new_tail;
