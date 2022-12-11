@@ -4,7 +4,7 @@
 
 namespace utility {
 
-inline std::vector<std::string> split(const std::string& str, const std::string& delim) {
+inline std::vector<std::string> split(const std::string& str, const std::string& delim = " ") {
   std::vector<std::string> tokens;
 
   auto tmp = str;
